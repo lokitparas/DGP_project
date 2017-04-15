@@ -155,6 +155,9 @@ class MeshVertex
     /** Set the color of the vertex. */
     void setColor(ColorRGBA const & color_) { color = color_; }
 
+    /** get Neighbours of a vertex. */
+    std::list<MeshVertex*> findNeighbours(double sigma_c);
+
   private:
     friend class Mesh;
 

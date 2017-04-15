@@ -476,7 +476,26 @@ Mesh::bilateralSmooth(double sigma_c, double sigma_s)
 
   while(p != vertices.end()){
     neighbours = (*p).findNeighbours(sigma_c);
+    Vector3 oldP = p->getPosition();
+    Vector3 normal;
+    if(p->hasPrecomputedNormal()){ normal = p->getNormal(); }
+    else{ p->updateNormal(); normal = p->getNormal(); }
 
+    double sum = 0;
+    double normalizer = 0;
+    std::list<MeshVertex*>::iterator i = neighbours.begin();
+    while(i != neighbours.end()){
+      double t = ((*i)->getPosition() - oldP).length();
+      double h = normal.dot((*i)->getPosition() - oldP);
+      double wc = exp((-t*t)/(2*sigma_c*sigma_c));
+      double ws = exp((-h*h)/(2*sigma_s*sigma_s));
+      sum += wc*ws*h;
+      normalizer += wc*ws;
+      i++;
+    }
+
+    Vector3 newP = oldP + normal*(sum/normalizer);
+    p->setPosition(newP);
     p++;
   }
 }

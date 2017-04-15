@@ -16,7 +16,7 @@
 #include <vector>
 
 /** A class for storing meshes with arbitrary topologies. */
-class Mesh : public virtual NamedObject, private Noncopyable
+class Mesh : public virtual NamedObject//, private Noncopyable
 {
   public:
     typedef MeshVertex Vertex;  ///< Vertex of the mesh.
@@ -253,7 +253,7 @@ class Mesh : public virtual NamedObject, private Noncopyable
     bool save(std::string const & path) const;
 
     /** Bilateral smooth a mesh given sigmaC and sigmaS */
-    void bilateralSMooth(double sigma_c, double sigma_s);
+    void bilateralSmooth(double sigma_c, double sigma_s);
 
   private:
     /**
