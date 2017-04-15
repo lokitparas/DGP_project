@@ -258,6 +258,9 @@ class Mesh : public virtual NamedObject, private Noncopyable
     /** noise the mesh */
     void noiseMesh(double sigma);
 
+    /** get average neighbour distance */
+    Real getAverageDistance();
+
   private:
     /**
      * Utility function to draw a face. Must be enclosed in the appropriate

@@ -477,7 +477,6 @@ Mesh::bilateralSmooth(double sigma_c, double sigma_s)
 
   while(p != vertices.end()){
     neighbours = (*p).findNeighbours(sigma_c);
-    std::cout << neighbours.size() << std::endl;
     p->isCovered = false;
     Vector3 oldP = p->getPosition();
     Vector3 normal;
@@ -518,4 +517,22 @@ Mesh::noiseMesh(double sigma)
     v->setPosition(position);
     v++;
   }
+}
+
+Real
+Mesh::getAverageDistance()
+{
+  VertexIterator v = vertices.begin();
+  Real total = 0;
+  long n = 1;
+  while(v != vertices.end()){
+    MeshVertex::EdgeIterator i = v->edgesBegin();
+    while(i != v->edgesEnd()){
+      total += ((v->getPosition() - (*i)->getOtherEndpoint(&(*v))->getPosition()).length() - total)/n;
+      n++;
+      i++;
+    }
+    v++;
+  }
+  return total;
 }
