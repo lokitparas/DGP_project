@@ -10,6 +10,9 @@
 #endif
 
 Graphics::RenderSystem * Viewer::render_system = NULL;
+Mesh * Viewer::originalMesh = NULL;
+Mesh * Viewer::noisyMesh = NULL;
+Mesh * Viewer::smoothMesh = NULL;
 Mesh * Viewer::mesh = NULL;
 int Viewer::width = 640;
 int Viewer::height = 480;
@@ -26,9 +29,12 @@ bool Viewer::show_edges = false;
 MeshVertex const * Viewer::highlighted_vertex = NULL;
 
 void
-Viewer::setObject(Mesh * o)
+Viewer::setObject(Mesh * a, Mesh * b, Mesh * c)
 {
-  mesh = o;
+  originalMesh = a;
+  noisyMesh = b;
+  smoothMesh = c;
+  mesh = originalMesh;
 }
 
 void
@@ -287,6 +293,21 @@ Viewer::keyPress(unsigned char key, int x, int y)
   else if (key == 'f' || key == 'F')
   {
     fitCameraToObject();
+    glutPostRedisplay();
+  }
+  else if (key == 'o' || key == 'O')
+  {
+    mesh = originalMesh;
+    glutPostRedisplay();
+  }
+  else if (key == 'n' || key == 'N')
+  {
+    mesh = noisyMesh;
+    glutPostRedisplay();
+  }
+  else if (key == 's' || key == 'S')
+  {
+    mesh = smoothMesh;
     glutPostRedisplay();
   }
   // else if (key == 'd' || key == 'd')

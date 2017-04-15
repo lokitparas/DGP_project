@@ -101,13 +101,19 @@ main(int argc, char * argv[])
 
   mesh.noiseMesh(0.005);
   mesh.save("./noisy.off");
+  
+  Mesh originalMesh, noisyMesh, smoothMesh;
+  originalMesh.load(in_path);
+  noisyMesh.load("./noisy.off");
+  smoothMesh.load(in_path);
+
   // Mesh smoothed = bilateralSmoothing(noised,0.001,0.0005);
 
   DGP_CONSOLE << "Read mesh '" << mesh.getName() << "' with " << mesh.numVertices() << " vertices, " << mesh.numEdges()
               << " edges and " << mesh.numFaces() << " faces from " << in_path;
 
   Viewer viewer1;
-  viewer1.setObject(&mesh);
+  viewer1.setObject(&originalMesh,&noisyMesh,&smoothMesh);
   viewer1.launch(argc, argv);
 
   // Viewer viewer2;
