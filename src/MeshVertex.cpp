@@ -72,3 +72,30 @@ MeshVertex::updateNormal()
 
   has_precomputed_normal = false;
 }
+
+std::list<MeshVertex *> 
+MeshVertex::findNeighbours(double sigma_c)
+{
+
+  std::list<MeshVertex * > neighbours;
+  std::queue<MeshVertex *> q;
+
+  q.push(this);
+
+  while(!q.empty()){
+    MeshVertex * curr = q.front();
+    q.pop();
+
+    for( EdgeIterator it = curr->edgesBegin(); it !=  curr->edgesEnd(); ++it){
+        MeshVertex* v1 = (*it)->getOtherEndpoint(curr);
+        double distance = abs((v1->getPosition()-this->getPosition()).length());
+        if (distance < 2*sigma_c && !v1->isCovered){
+          v1->isCovered = true;
+          q.push(v1);
+          neighbours.push_back(v1);
+        }
+    }
+
+  }
+  return neighbours;
+}
