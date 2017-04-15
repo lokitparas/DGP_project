@@ -42,17 +42,17 @@ class MeshVertex
     /** Default constructor. */
     MeshVertex()
     : position(Vector3::zero()), normal(Vector3::zero()), color(ColorRGBA(1, 1, 1, 1)), has_precomputed_normal(false),
-      normal_normalization_factor(0) {}
+      normal_normalization_factor(0), isCovered(false) {}
 
     /** Sets the vertex to have a given location. */
     explicit MeshVertex(Vector3 const & p)
     : position(p), normal(Vector3::zero()), color(ColorRGBA(1, 1, 1, 1)), has_precomputed_normal(false),
-      normal_normalization_factor(0)
+      normal_normalization_factor(0), isCovered(false)
     {}
 
     /** Sets the vertex to have a location, normal and color. */
     MeshVertex(Vector3 const & p, Vector3 const & n, ColorRGBA const & c = ColorRGBA(1, 1, 1, 1))
-    : position(p), normal(n), color(c), has_precomputed_normal(true), normal_normalization_factor(0)
+    : position(p), normal(n), color(c), has_precomputed_normal(true), normal_normalization_factor(0), isCovered(false)
     {}
 
     /**
@@ -238,6 +238,7 @@ class MeshVertex
     FaceList faces;
     bool has_precomputed_normal;
     float normal_normalization_factor;
+    bool isCovered;
 
 }; // class MeshVertex
 
