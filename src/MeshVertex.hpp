@@ -16,6 +16,7 @@
 #include "DGP/Colors.hpp"
 #include "DGP/Vector3.hpp"
 #include <list>
+#include <queue>
 
 // Forward declarations
 class MeshEdge;
@@ -27,7 +28,7 @@ class MeshVertex
   public:
     typedef MeshEdge Edge;  ///< Edge of the mesh.
     typedef MeshFace Face;  ///< Face of the mesh.
-
+    bool isCovered;
   private:
     typedef std::list<Edge *> EdgeList;
     typedef std::list<Face *> FaceList;
@@ -227,6 +228,8 @@ class MeshVertex
         setNormal(normal_normalization_factor < 1e-20f ? Vector3::zero() : sum_normals / normal_normalization_factor);
       }
     }
+
+    std::list<MeshVertex *> findNeighbours(double sigma_c);
 
     Vector3 position;
     Vector3 normal;
