@@ -7,6 +7,7 @@
 #include <cmath>
 #include <fstream>
 #include <unordered_map>
+#include <random>
 
 MeshEdge *
 Mesh::mergeEdges(Edge * e0, Edge * e1)
@@ -476,6 +477,8 @@ Mesh::bilateralSmooth(double sigma_c, double sigma_s)
 
   while(p != vertices.end()){
     neighbours = (*p).findNeighbours(sigma_c);
+    std::cout << neighbours.size() << std::endl;
+    p->isCovered = false;
     Vector3 oldP = p->getPosition();
     Vector3 normal;
     if(p->hasPrecomputedNormal()){ normal = p->getNormal(); }
@@ -491,11 +494,37 @@ Mesh::bilateralSmooth(double sigma_c, double sigma_s)
       double ws = exp((-h*h)/(2*sigma_s*sigma_s));
       sum += wc*ws*h;
       normalizer += wc*ws;
+      (*i)->isCovered = false;
       i++;
     }
 
     Vector3 newP = oldP + normal*(sum/normalizer);
     p->setPosition(newP);
     p++;
+    neighbours.clear();
+  }
+}
+
+void
+Mesh::noiseMesh(double sigma)
+{
+  std::default_random_engine generator;
+  std::normal_distribution<double> distribution(0.0,sigma);
+
+  VertexIterator v = vertices.begin();
+  while(v != vertices.end()){
+    Vector3 position = v->getPosition();
+    position.set(position.x()+distribution(generator), position.y()+distribution(generator), position.z()+distribution(generator));
+    v->setPosition(position);
+
+    MeshVertex::EdgeIterator i = v->edgesBegin();
+    while(i != v->edgesEnd()){
+      std::cout << "------------------------------------------" << std::endl;
+      std::cout << (*i)->getEndpoint(0)->getPosition() << std::endl;
+      std::cout << (*i)->getEndpoint(1)->getPosition() << std::endl;
+      std::cout << v->getPosition() << std::endl;
+      i++;
+    }
+    v++;
   }
 }

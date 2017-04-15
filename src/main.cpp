@@ -4,6 +4,7 @@
 #include <vector>
 #include <random>
 #include "DGP/VectorN.hpp"
+#include "Viewer.hpp"
 
 using namespace std;
 
@@ -73,37 +74,18 @@ computeD2(Mesh const & mesh, size_t num_points, size_t num_bins, std::vector<dou
   //     and bin them in the histogram
 }
 
-<<<<<<< HEAD
-Mesh
-noiseMesh(Mesh & mesh, float sigma)
-{
-  Mesh noisedMesh = mesh;
-  default_random_engine generator;
-  normal_distribution<double> distribution(0.0,sigma);
-  for(std::list<MeshFace>::iterator face_iterator = noisedMesh.facesBegin(); face_iterator != noisedMesh.facesEnd(); ++face_iterator){
-    MeshFace currentFace = *face_iterator;
-
-    for(std::list<MeshVertex *>::iterator vertex_iterator = currentFace.verticesBegin(); vertex_iterator != currentFace.verticesEnd(); ++vertex_iterator){
-      MeshVertex currentVertex = *(*vertex_iterator);
-      Vector3 position = currentVertex.getPosition();
-      position.set(position.x()+distribution(generator), position.y()+distribution(generator), position.z()+distribution(generator));
-      currentVertex.setPosition(position);
-    }
-  }
-  return noisedMesh;
-}
 
 /**
  * Smooth a mesh
  * Paper source - Fleishman-2003.pdf
  */
-Mesh
-bilateralSmoothing(Mesh const & mesh, double sigma_c, double sigma_s)
-{
-  Mesh smoothMesh = mesh;
-  smoothMesh.bilateralSmooth(sigma_c, sigma_s);
-  return smoothMesh;
-}
+// Mesh
+// bilateralSmoothing(Mesh const & mesh, double sigma_c, double sigma_s)
+// {
+//   Mesh smoothMesh = mesh;
+//   smoothMesh.bilateralSmooth(sigma_c, sigma_s);
+//   return smoothMesh;
+// }
 
 int
 main(int argc, char * argv[])
@@ -117,41 +99,21 @@ main(int argc, char * argv[])
   if (!mesh.load(in_path))
     return -1;
 
+  mesh.noiseMesh(0.005);
+  mesh.save("./noisy.off");
+  // Mesh smoothed = bilateralSmoothing(noised,0.001,0.0005);
+
   DGP_CONSOLE << "Read mesh '" << mesh.getName() << "' with " << mesh.numVertices() << " vertices, " << mesh.numEdges()
               << " edges and " << mesh.numFaces() << " faces from " << in_path;
 
-  std::vector<double> feature_vector;
-  for (int i = 2; i < argc; ++i)
-  {
-    std::string feat_type = argv[i];
-    if (feat_type == "vol2bbox")
-      feature_vector.push_back(computeVolumeToBBoxRatio(mesh));
-    else if (feat_type == "d2")
-    {
-      if (i > argc - 3)
-        return usage(argc, argv);
+  Viewer viewer1;
+  viewer1.setObject(&mesh);
+  viewer1.launch(argc, argv);
 
-      int num_points = atoi(argv[++i]);
-      int num_bins = atoi(argv[++i]);
-      if (num_points < 1 || num_bins < 1)
-      {
-        std::cerr << "Invalid D2 parameters" << std::endl;
-        return -1;
-      }
+  // Viewer viewer2;
+  // viewer2.setObject(&noised);
+  // viewer2.launch(argc, argv);
 
-      std::vector<double> d2;
-      computeD2(mesh, (size_t)num_points, (size_t)num_bins, d2);
-      feature_vector.insert(feature_vector.end(), d2.begin(), d2.end());
-    }
-  }
-
-  for (size_t i = 0; i < feature_vector.size(); ++i)
-  {
-    if (i > 0) std::cout << ' ';
-    std::cout << feature_vector[i];
-  }
-
-  std::cout << std::endl;
 
   return 0;
 }

@@ -14,6 +14,8 @@ LIBS := -lX11 -lXi -lXmu -lglut -lGLU -lGL -lm
 SRCS := $(shell ls -1 $(ROOT_DIR)/src/DGP/*.cpp | sed 's/ /\\ /g') \
         $(shell ls -1 $(ROOT_DIR)/src/DGP/Graphics/*.cpp | sed 's/ /\\ /g') \
         $(shell ls -1 $(ROOT_DIR)/src/*.cpp | sed 's/ /\\ /g')
+SRCS1 := $(shell ls -1 $(ROOT_DIR)/src/*.cpp | sed 's/ /\\ /g')
+OBJS1 := $(SRCS1:.cpp=.o)
 OBJS := $(SRCS:.cpp=.o)
 MAIN := meshdesc
 
@@ -35,7 +37,7 @@ $(MAIN): $(OBJS)
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 clean:
-	$(RM) $(OBJS) *~ $(MAIN)
+	$(RM) $(OBJS1) *~ $(MAIN)
 
 depend: $(SRCS)
 	makedepend $(INCLUDES) $^

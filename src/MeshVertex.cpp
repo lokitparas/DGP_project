@@ -76,26 +76,31 @@ MeshVertex::updateNormal()
 std::list<MeshVertex *> 
 MeshVertex::findNeighbours(double sigma_c)
 {
-
   std::list<MeshVertex * > neighbours;
   std::queue<MeshVertex *> q;
 
+  this->isCovered = true;
   q.push(this);
+
 
   while(!q.empty()){
     MeshVertex * curr = q.front();
     q.pop();
 
     for( EdgeIterator it = curr->edgesBegin(); it !=  curr->edgesEnd(); ++it){
+        std::cout << "HAHA" << std::endl;
+        std::cout << (*it)->getEndpoint(0)->getPosition() << std::endl;
+        std::cout << (*it)->getEndpoint(1)->getPosition() << std::endl;
+        std::cout << curr->getPosition() << std::endl;
         MeshVertex* v1 = (*it)->getOtherEndpoint(curr);
-        double distance = abs((v1->getPosition()-this->getPosition()).length());
-        if (distance < 2*sigma_c && !v1->isCovered){
+        double distance = (v1->getPosition()-this->getPosition()).length();
+        if (!v1->isCovered && distance < 2*sigma_c){
           v1->isCovered = true;
           q.push(v1);
           neighbours.push_back(v1);
         }
     }
-
   }
+
   return neighbours;
 }

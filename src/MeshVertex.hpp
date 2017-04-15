@@ -28,7 +28,7 @@ class MeshVertex
   public:
     typedef MeshEdge Edge;  ///< Edge of the mesh.
     typedef MeshFace Face;  ///< Face of the mesh.
-    bool isCovered;
+  
   private:
     typedef std::list<Edge *> EdgeList;
     typedef std::list<Face *> FaceList;
@@ -38,21 +38,22 @@ class MeshVertex
     typedef typename EdgeList::const_iterator  EdgeConstIterator;  ///< Const iterator over edges.
     typedef typename FaceList::iterator        FaceIterator;       ///< Iterator over faces.
     typedef typename FaceList::const_iterator  FaceConstIterator;  ///< Const iterator over faces.
+    bool isCovered = false; ///< covered in BFS?
 
     /** Default constructor. */
     MeshVertex()
     : position(Vector3::zero()), normal(Vector3::zero()), color(ColorRGBA(1, 1, 1, 1)), has_precomputed_normal(false),
-      normal_normalization_factor(0), isCovered(false) {}
+      normal_normalization_factor(0){}
 
     /** Sets the vertex to have a given location. */
     explicit MeshVertex(Vector3 const & p)
     : position(p), normal(Vector3::zero()), color(ColorRGBA(1, 1, 1, 1)), has_precomputed_normal(false),
-      normal_normalization_factor(0), isCovered(false)
+      normal_normalization_factor(0)
     {}
 
     /** Sets the vertex to have a location, normal and color. */
     MeshVertex(Vector3 const & p, Vector3 const & n, ColorRGBA const & c = ColorRGBA(1, 1, 1, 1))
-    : position(p), normal(n), color(c), has_precomputed_normal(true), normal_normalization_factor(0), isCovered(false)
+    : position(p), normal(n), color(c), has_precomputed_normal(true), normal_normalization_factor(0)
     {}
 
     /**
@@ -232,8 +233,6 @@ class MeshVertex
       }
     }
 
-    std::list<MeshVertex *> findNeighbours(double sigma_c);
-
     Vector3 position;
     Vector3 normal;
     ColorRGBA color;
@@ -241,7 +240,6 @@ class MeshVertex
     FaceList faces;
     bool has_precomputed_normal;
     float normal_normalization_factor;
-    bool isCovered;
 
 }; // class MeshVertex
 
