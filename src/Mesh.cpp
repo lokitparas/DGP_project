@@ -516,15 +516,6 @@ Mesh::noiseMesh(double sigma)
     Vector3 position = v->getPosition();
     position.set(position.x()+distribution(generator), position.y()+distribution(generator), position.z()+distribution(generator));
     v->setPosition(position);
-
-    MeshVertex::EdgeIterator i = v->edgesBegin();
-    while(i != v->edgesEnd()){
-      std::cout << "------------------------------------------" << std::endl;
-      std::cout << (*i)->getEndpoint(0)->getPosition() << std::endl;
-      std::cout << (*i)->getEndpoint(1)->getPosition() << std::endl;
-      std::cout << v->getPosition() << std::endl;
-      i++;
-    }
     v++;
   }
 }

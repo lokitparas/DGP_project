@@ -74,19 +74,6 @@ computeD2(Mesh const & mesh, size_t num_points, size_t num_bins, std::vector<dou
   //     and bin them in the histogram
 }
 
-
-/**
- * Smooth a mesh
- * Paper source - Fleishman-2003.pdf
- */
-// Mesh
-// bilateralSmoothing(Mesh const & mesh, double sigma_c, double sigma_s)
-// {
-//   Mesh smoothMesh = mesh;
-//   smoothMesh.bilateralSmooth(sigma_c, sigma_s);
-//   return smoothMesh;
-// }
-
 int
 main(int argc, char * argv[])
 {
@@ -101,13 +88,14 @@ main(int argc, char * argv[])
 
   mesh.noiseMesh(0.005);
   mesh.save("./noisy.off");
-  
+  mesh.bilateralSmooth(0.005,0.05);
+  mesh.save("./smooth.off");
+
   Mesh originalMesh, noisyMesh, smoothMesh;
   originalMesh.load(in_path);
   noisyMesh.load("./noisy.off");
-  smoothMesh.load(in_path);
+  smoothMesh.load("./smooth.off");
 
-  // Mesh smoothed = bilateralSmoothing(noised,0.001,0.0005);
 
   DGP_CONSOLE << "Read mesh '" << mesh.getName() << "' with " << mesh.numVertices() << " vertices, " << mesh.numEdges()
               << " edges and " << mesh.numFaces() << " faces from " << in_path;

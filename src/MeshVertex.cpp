@@ -88,15 +88,13 @@ MeshVertex::findNeighbours(double sigma_c)
     q.pop();
 
     for( EdgeIterator it = curr->edgesBegin(); it !=  curr->edgesEnd(); ++it){
-        std::cout << "HAHA" << std::endl;
-        std::cout << (*it)->getEndpoint(0)->getPosition() << std::endl;
-        std::cout << (*it)->getEndpoint(1)->getPosition() << std::endl;
-        std::cout << curr->getPosition() << std::endl;
         MeshVertex* v1 = (*it)->getOtherEndpoint(curr);
         double distance = (v1->getPosition()-this->getPosition()).length();
-        if (!v1->isCovered && distance < 2*sigma_c){
+        if (!v1->isCovered){
           v1->isCovered = true;
-          q.push(v1);
+          if(distance < 2*sigma_c){
+            q.push(v1);
+          }
           neighbours.push_back(v1);
         }
     }
