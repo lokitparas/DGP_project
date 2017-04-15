@@ -69,6 +69,20 @@ computeD2(Mesh const & mesh, size_t num_points, size_t num_bins, std::vector<dou
   //     and bin them in the histogram
 }
 
+/**
+ * Smooth a mesh
+ * Paper source - Fleishman-2003.pdf
+ */
+Mesh
+bilateralSmoothing(Mesh const & mesh, double sigma_c, double sigma_s)
+{
+  Mesh smoothMesh = mesh;
+  smoothMesh.bilateralSmooth(sigma_c, sigma_s);
+  return smoothMesh;
+}
+
+
+
 int
 main(int argc, char * argv[])
 {
