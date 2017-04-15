@@ -2,6 +2,10 @@
 #include <algorithm>
 #include <cstdlib>
 #include <vector>
+#include <random>
+#include "DGP/VectorN.hpp"
+
+using namespace std;
 
 int
 usage(int argc, char * argv[])
@@ -69,6 +73,26 @@ computeD2(Mesh const & mesh, size_t num_points, size_t num_bins, std::vector<dou
   //     and bin them in the histogram
 }
 
+<<<<<<< HEAD
+Mesh
+noiseMesh(Mesh & mesh, float sigma)
+{
+  Mesh noisedMesh = mesh;
+  default_random_engine generator;
+  normal_distribution<double> distribution(0.0,sigma);
+  for(std::list<MeshFace>::iterator face_iterator = noisedMesh.facesBegin(); face_iterator != noisedMesh.facesEnd(); ++face_iterator){
+    MeshFace currentFace = *face_iterator;
+
+    for(std::list<MeshVertex *>::iterator vertex_iterator = currentFace.verticesBegin(); vertex_iterator != currentFace.verticesEnd(); ++vertex_iterator){
+      MeshVertex currentVertex = *(*vertex_iterator);
+      Vector3 position = currentVertex.getPosition();
+      position.set(position.x()+distribution(generator), position.y()+distribution(generator), position.z()+distribution(generator));
+      currentVertex.setPosition(position);
+    }
+  }
+  return noisedMesh;
+}
+
 /**
  * Smooth a mesh
  * Paper source - Fleishman-2003.pdf
@@ -80,8 +104,6 @@ bilateralSmoothing(Mesh const & mesh, double sigma_c, double sigma_s)
   smoothMesh.bilateralSmooth(sigma_c, sigma_s);
   return smoothMesh;
 }
-
-
 
 int
 main(int argc, char * argv[])
