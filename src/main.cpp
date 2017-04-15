@@ -2,6 +2,10 @@
 #include <algorithm>
 #include <cstdlib>
 #include <vector>
+#include <random>
+#include "DGP/VectorN.hpp"
+
+using namespace std;
 
 int
 usage(int argc, char * argv[])
@@ -67,6 +71,25 @@ computeD2(Mesh const & mesh, size_t num_points, size_t num_bins, std::vector<dou
   // (2) Compute the bounding box diagonal, which is the maximum value that can be binned in the histogram
   // (3) Compute all pairwise L2 distances between distinct points (i.e. ignore the zero distance between a point and itself)
   //     and bin them in the histogram
+}
+
+Mesh
+noiseMesh(Mesh & mesh, float sigma)
+{
+  Mesh noisedMesh = mesh;
+  default_random_engine generator;
+  normal_distribution<double> distribution(0.0,sigma);
+  for(std::list<MeshFace>::iterator face_iterator = noisedMesh.facesBegin(); face_iterator != noisedMesh.facesEnd(); ++face_iterator){
+    MeshFace currentFace = *face_iterator;
+
+    for(std::list<MeshVertex *>::iterator vertex_iterator = currentFace.verticesBegin(); vertex_iterator != currentFace.verticesEnd(); ++vertex_iterator){
+      MeshVertex currentVertex = *(*vertex_iterator);
+      Vector3 position = currentVertex.getPosition();
+      position.set(position.x()+distribution(generator), position.y()+distribution(generator), position.z()+distribution(generator));
+      currentVertex.setPosition(position);
+    }
+  }
+  return noisedMesh;
 }
 
 int

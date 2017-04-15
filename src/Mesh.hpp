@@ -16,7 +16,7 @@
 #include <vector>
 
 /** A class for storing meshes with arbitrary topologies. */
-class Mesh : public virtual NamedObject, private Noncopyable
+class Mesh : public virtual NamedObject//, private Noncopyable
 {
   public:
     typedef MeshVertex Vertex;  ///< Vertex of the mesh.
