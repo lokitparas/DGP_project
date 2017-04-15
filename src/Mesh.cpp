@@ -467,3 +467,16 @@ Mesh::save(std::string const & path) const
   DGP_ERROR << "Unsupported mesh format: " << path;
   return false;
 }
+
+void
+Mesh::bilateralSmooth(double sigma_c, double sigma_s)
+{
+  VertexIterator p = vertices.begin();
+  std::list<MeshVertex*> neighbours;
+
+  while(p != vertices.end()){
+    neighbours = (*p).findNeighbours(sigma_c);
+
+    p++;
+  }
+}

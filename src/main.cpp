@@ -73,6 +73,7 @@ computeD2(Mesh const & mesh, size_t num_points, size_t num_bins, std::vector<dou
   //     and bin them in the histogram
 }
 
+<<<<<<< HEAD
 Mesh
 noiseMesh(Mesh & mesh, float sigma)
 {
@@ -90,6 +91,18 @@ noiseMesh(Mesh & mesh, float sigma)
     }
   }
   return noisedMesh;
+}
+
+/**
+ * Smooth a mesh
+ * Paper source - Fleishman-2003.pdf
+ */
+Mesh
+bilateralSmoothing(Mesh const & mesh, double sigma_c, double sigma_s)
+{
+  Mesh smoothMesh = mesh;
+  smoothMesh.bilateralSmooth(sigma_c, sigma_s);
+  return smoothMesh;
 }
 
 int
