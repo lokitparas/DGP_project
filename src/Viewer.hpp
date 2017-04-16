@@ -16,10 +16,9 @@ class Viewer
 {
   private:
     static Graphics::RenderSystem * render_system;
-    static Mesh * originalMesh;
-    static Mesh * noisyMesh;
-    static Mesh * smoothMesh;
     static Mesh * mesh;
+    static double sigma_c;
+    static double sigma_s;
 
     static int width;
     static int height;
@@ -35,7 +34,7 @@ class Viewer
 
   public:
     /** Set the object to be displayed. The object must persist as long as the viewer does. */
-    static void setObject(Mesh * o, Mesh * n , Mesh* s);
+    static void setObject(Mesh * o, double sigma_c, double sigma_s);
 
     /**
      * Call this function to launch the viewer. It will not return under normal circumstances, so make sure stuff is set up

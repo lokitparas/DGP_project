@@ -10,10 +10,9 @@
 #endif
 
 Graphics::RenderSystem * Viewer::render_system = NULL;
-Mesh * Viewer::originalMesh = NULL;
-Mesh * Viewer::noisyMesh = NULL;
-Mesh * Viewer::smoothMesh = NULL;
 Mesh * Viewer::mesh = NULL;
+double Viewer::sigma_c = 0;
+double Viewer::sigma_s = 0;
 int Viewer::width = 640;
 int Viewer::height = 480;
 Camera Viewer::camera;
@@ -29,12 +28,11 @@ bool Viewer::show_edges = false;
 MeshVertex const * Viewer::highlighted_vertex = NULL;
 
 void
-Viewer::setObject(Mesh * a, Mesh * b, Mesh * c)
+Viewer::setObject(Mesh * a, double sigmaC, double sigmaS)
 {
-  originalMesh = a;
-  noisyMesh = b;
-  smoothMesh = c;
-  mesh = originalMesh;
+  mesh = a;
+  sigma_c = sigmaC;
+  sigma_s = sigmaS;
 }
 
 void
@@ -297,17 +295,17 @@ Viewer::keyPress(unsigned char key, int x, int y)
   }
   else if (key == 'o' || key == 'O')
   {
-    mesh = originalMesh;
+    mesh->load("./orig.off");
     glutPostRedisplay();
   }
   else if (key == 'n' || key == 'N')
   {
-    mesh = noisyMesh;
+    mesh->load("./noisy.off");
     glutPostRedisplay();
   }
   else if (key == 's' || key == 'S')
   {
-    mesh = smoothMesh;
+    mesh->bilateralSmooth(sigma_c, sigma_s);
     glutPostRedisplay();
   }
   // else if (key == 'd' || key == 'd')
