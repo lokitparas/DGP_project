@@ -261,6 +261,9 @@ class Mesh : public virtual NamedObject, private Noncopyable
     /** get average neighbour distance */
     Real getAverageDistance();
 
+    /** difference with original mesh */
+    Real getdifference();
+
   private:
     /**
      * Utility function to draw a face. Must be enclosed in the appropriate

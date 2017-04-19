@@ -30,23 +30,20 @@ main(int argc, char * argv[])
   if (!mesh.load(in_path))
     return -1;
 
-  std::cout << mesh.getAverageDistance() << std::endl;
-
-  mesh.save("./orig.off");
-  mesh.noiseMesh(0.006);
-  mesh.save("./noisy.off");
-  
   DGP_CONSOLE << "Read mesh '" << mesh.getName() << "' with " << mesh.numVertices() << " vertices, " << mesh.numEdges()
               << " edges and " << mesh.numFaces() << " faces from " << in_path;
 
+  Real d = mesh.getAverageDistance();
+  double sigma_c = d/20;
+  double sigma_s = d/3;
+
+  mesh.save("./orig.off");
+  mesh.noiseMesh(d/3);
+  mesh.save("./noisy.off");
+  
   Viewer viewer1;
-  viewer1.setObject(&mesh,0.005,0.05);
+  viewer1.setObject(&mesh, sigma_c,sigma_s);
   viewer1.launch(argc, argv);
-
-  // Viewer viewer2;
-  // viewer2.setObject(&noised);
-  // viewer2.launch(argc, argv);
-
 
   return 0;
 }

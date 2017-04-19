@@ -28,9 +28,9 @@ bool Viewer::show_edges = false;
 MeshVertex const * Viewer::highlighted_vertex = NULL;
 
 void
-Viewer::setObject(Mesh * a, double sigmaC, double sigmaS)
+Viewer::setObject(Mesh * o, double sigmaC, double sigmaS)
 {
-  mesh = a;
+  mesh = o;
   sigma_c = sigmaC;
   sigma_s = sigmaS;
 }
@@ -306,6 +306,7 @@ Viewer::keyPress(unsigned char key, int x, int y)
   else if (key == 's' || key == 'S')
   {
     mesh->bilateralSmooth(sigma_c, sigma_s);
+    std::cout << mesh->getdifference() << std::endl;
     glutPostRedisplay();
   }
   // else if (key == 'd' || key == 'd')

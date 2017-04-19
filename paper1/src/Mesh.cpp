@@ -536,3 +536,23 @@ Mesh::getAverageDistance()
   }
   return total;
 }
+
+Real
+Mesh::getdifference()
+{
+  Mesh m;
+  m.load("./orig.off");
+
+  Real total = 0;
+  long n = 1;
+
+  VertexIterator v1 = vertices.begin();
+  VertexIterator v2 = m.verticesBegin();
+  while(v1 != vertices.end()){
+    total += ((v1->getPosition() - v2->getPosition()).length() - total)/n;
+    n++;
+    v1++; v2++;
+  }
+
+  return std::sqrt(total);
+}
